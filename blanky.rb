@@ -50,6 +50,7 @@ Rails::Initializer.run do |config|
   config.gem "haml"
   config.gem "rspec", :lib => false, :version => ">= 1.2.0"
   config.gem "rspec-rails", :lib => false, :version => ">= 1.2.0"
+  config.gem "cucumber"
   config.time_zone = 'UTC'
 
 end
