@@ -7,14 +7,12 @@
   run "rm public/index.html"
   run "rm public/favicon.ico"
   run "rm public/robots.txt"
-  run "rm -f public/javascripts/*"
-
-# Download JQuery
-  run "curl -L http://jqueryjs.googlecode.com/files/jquery-1.2.6.min.js > public/javascripts/jquery.js"
-  run "curl -L http://jqueryjs.googlecode.com/svn/trunk/plugins/form/jquery.form.js > public/javascripts/jquery.form.js"
 
 # Set up git repository
   git :init
+  
+  # download the yahoo css reset
+  run "curl -L http://yui.yahooapis.com/2.8.0r4/build/reset/reset-min.css > public/stylesheets/reset.css"
   
 # Copy database.yml for distribution use
   run "cp config/database.yml config/database.yml.example"
@@ -49,23 +47,10 @@ RAILS_GEM_VERSION = '2.3.5' unless defined? RAILS_GEM_VERSION
 require File.join(File.dirname(__FILE__), 'boot')
 
 Rails::Initializer.run do |config|
-  # Settings in config/environments/* take precedence over those specified here.
-  # Application configuration should go into files in config/initializers
-  # -- all .rb files in that directory are automatically loaded.
-
-  # Add additional load paths for your own custom dirs
-  # config.load_paths += %W( #{RAILS_ROOT}/extras )
-
-  # Specify gems that this application depends on and have them installed with rake gems:install
-  # config.gem "bj"
-  # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
-  # config.gem "sqlite3-ruby", :lib => "sqlite3"
-  # config.gem "aws-s3", :lib => "aws/s3"
   config.gem "haml"
   config.gem "rspec", :lib => false, :version => ">= 1.2.0"
   config.gem "rspec-rails", :lib => false, :version => ">= 1.2.0"
   config.time_zone = 'UTC'
-
 
 end
   }
@@ -82,11 +67,20 @@ end
   end
 end
   }
-  file 'app/views/layouts/applicaton.haml',
+  file 'app/views/static/index.haml',
+  %q{%h1="Static"
+  }
+  
+  file 'app/views/layouts/application.haml',
   %q{%html
   %head
+    =stylesheet_link_tag "reset.css"
+    =stylesheet_link_tag "main.css"
+    =javascript_include_tag :defaults
   %body
+    =yield
   }
+  
   file 'config/routes.rb',
   %q{ActionController::Routing::Routes.draw do |map|
 
@@ -96,6 +90,9 @@ end
   map.connect ':controller/:action/:id.:format'
 end
   }
+  
+  file 'public/stylesheets/main.css',
+  %q{}
 
 # Initialize submodules
   git :submodule => "init"
