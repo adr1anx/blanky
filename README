@@ -1,1 +1,3 @@
-Blank is a blank rails project template.  It adds the basics of what I need in nearly any new project.
+Blank rails template.
+
+uses haml, rspec, cucumber gems.  sets up haml and runs authlogic generators and sets up some basic actions/templates
